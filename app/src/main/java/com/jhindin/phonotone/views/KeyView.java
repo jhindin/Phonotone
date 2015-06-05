@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,13 +31,27 @@ public class KeyView extends View {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        final int pointerCount = ev.getPointerCount();
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
+        final int pointerCount = event.getPointerCount();
 
-        System.out.println("onTouchEvent " + pointerCount);
-        for (int p = 0; p < pointerCount; p++) {
-            System.out.printf("  pointer %d/%d: (%f,%f)\n",
-                    p, ev.getPointerId(p), ev.getX(p), ev.getY(p));
+
+        int upIndex = -1;
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            upIndex = event.getActionIndex();
+        }
+
+        for (PhonotoneKey key : keys) {
+            boolean pressed = false;
+
+            for (int p = 0; p < pointerCount; p++) {
+                pressed |= key.rect.contains((int) event.getX(p), (int) event.getY(p)) &&
+                        p != upIndex;
+            }
+
+            if (key.pressed != pressed) {
+                key.pressed = pressed;
+                invalidate(key.rect);
+            }
         }
 
         return true;
