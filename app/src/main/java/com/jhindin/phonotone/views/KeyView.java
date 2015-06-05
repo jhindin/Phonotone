@@ -11,8 +11,9 @@ public class KeyView extends View {
     Paint mFillPaint, mStrokePaint;
     int mWidth, mHeight;
 
-    Rect keyRects[] =  { new Rect(), new Rect(), new Rect(),
-            new Rect(), new Rect(), new Rect()};
+    PhonotoneKey keys[] =  { new PhonotoneKey(), new PhonotoneKey(),
+            new PhonotoneKey(), new PhonotoneKey(),
+            new PhonotoneKey(), new PhonotoneKey()};
 
 
     public KeyView(Context context, AttributeSet attrs) {
@@ -41,44 +42,48 @@ public class KeyView extends View {
         keyWidth = 2 * keyGap;
 
 
-        keyRects[0].top = keyVerticalPadding;
-        keyRects[0].bottom = keyRects[0].top + keyHeight - 1;
-        keyRects[0].left = 0;
-        keyRects[0].right = keyWidth - 1;
+        keys[0].rect.top = keyVerticalPadding;
+        keys[0].rect.bottom = keys[0].rect.top + keyHeight - 1;
+        keys[0].rect.left = 0;
+        keys[0].rect.right = keyWidth - 1;
 
-        keyRects[1].top = keyRects[0].bottom + keyVerticalPadding;
-        keyRects[1].bottom = keyRects[1].top + keyHeight - 1;
-        keyRects[1].left = 0;
-        keyRects[1].right = keyWidth - 1;
+        keys[1].rect.top = keys[0].rect.bottom + keyVerticalPadding;
+        keys[1].rect.bottom = keys[1].rect.top + keyHeight - 1;
+        keys[1].rect.left = 0;
+        keys[1].rect.right = keyWidth - 1;
 
-        keyRects[2].top = keyRects[1].bottom + keyVerticalPadding;
-        keyRects[2].bottom =  keyRects[2].top + keyHeight - 1;
-        keyRects[2].left = 0;
-        keyRects[2].right = keyWidth - 1;
+        keys[2].rect.top = keys[1].rect.bottom + keyVerticalPadding;
+        keys[2].rect.bottom =  keys[2].rect.top + keyHeight - 1;
+        keys[2].rect.left = 0;
+        keys[2].rect.right = keyWidth - 1;
 
-        keyRects[3].top = keyVerticalPadding;
-        keyRects[3].bottom = keyRects[3].top + keyHeight - 1;
-        keyRects[3].left = w - 1 - (keyWidth - 1);
-        keyRects[3].right = w - 1;
+        keys[3].rect.top = keyVerticalPadding;
+        keys[3].rect.bottom = keys[3].rect.top + keyHeight - 1;
+        keys[3].rect.left = w - 1 - (keyWidth - 1);
+        keys[3].rect.right = w - 1;
 
-        keyRects[4].top = keyRects[0].bottom + keyVerticalPadding;
-        keyRects[4].bottom =  keyRects[4].top + keyHeight - 1;
-        keyRects[4].left = w - 1 - (keyWidth - 1);
-        keyRects[4].right = w - 1;
+        keys[4].rect.top = keys[3].rect.bottom + keyVerticalPadding;
+        keys[4].rect.bottom =  keys[4].rect.top + keyHeight - 1;
+        keys[4].rect.left = w - 1 - (keyWidth - 1);
+        keys[4].rect.right = w - 1;
 
-        keyRects[5].top = keyRects[1].bottom + keyVerticalPadding;
-        keyRects[5].bottom =  keyRects[5].top + keyHeight - 1;
-        keyRects[5].left = w - 1 - (keyWidth - 1);
-        keyRects[5].right = w - 1;
+        keys[5].rect.top = keys[4].rect.bottom + keyVerticalPadding;
+        keys[5].rect.bottom =  keys[5].rect.top + keyHeight - 1;
+        keys[5].rect.left = w - 1 - (keyWidth - 1);
+        keys[5].rect.right = w - 1;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        for (Rect r : keyRects) {
-            canvas.drawRect(r, mStrokePaint);
+        for (PhonotoneKey k : keys) {
+            canvas.drawRect(k.rect, k.pressed ? mFillPaint : mStrokePaint);
         }
+    }
 
+    class PhonotoneKey {
+        public Rect rect = new Rect();
+        boolean pressed = false;
     }
 }
