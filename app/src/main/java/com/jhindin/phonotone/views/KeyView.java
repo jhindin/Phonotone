@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class KeyView extends View {
-    Paint mPaint;
+    Paint mFillPaint, mStrokePaint;
     int mWidth, mHeight;
 
     Rect keyRects[] =  { new Rect(), new Rect(), new Rect(),
@@ -18,8 +18,13 @@ public class KeyView extends View {
     public KeyView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mPaint = new Paint();
-        mPaint.setColor(0xffffffff);
+        mFillPaint = new Paint();
+        mFillPaint.setColor(0xffffffff);
+
+        mStrokePaint = new Paint();
+        mStrokePaint.setColor(0xffffffff);
+        mStrokePaint.setStyle(Paint.Style.STROKE);
+
     }
 
     @Override
@@ -72,7 +77,7 @@ public class KeyView extends View {
         super.onDraw(canvas);
 
         for (Rect r : keyRects) {
-            canvas.drawRect(r, mPaint);
+            canvas.drawRect(r, mStrokePaint);
         }
 
     }
