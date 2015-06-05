@@ -1,5 +1,7 @@
 package com.jhindin.phonotone;
 
+import android.app.AlertDialog;
+import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +14,18 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PackageManager pm = getPackageManager();
+
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN_MULTITOUCH_JAZZHAND))
+        {
+            AlertDialog.Builder ab =  new AlertDialog.Builder(this);
+            ab.setTitle("No multitouch");
+
+            ab.show();
+
+        }
+
     }
 
     @Override
