@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class KeyView extends View {
@@ -26,6 +27,19 @@ public class KeyView extends View {
         mStrokePaint.setColor(0xffffffff);
         mStrokePaint.setStyle(Paint.Style.STROKE);
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        final int pointerCount = ev.getPointerCount();
+
+        System.out.println("onTouchEvent " + pointerCount);
+        for (int p = 0; p < pointerCount; p++) {
+            System.out.printf("  pointer %d/%d: (%f,%f)\n",
+                    p, ev.getPointerId(p), ev.getX(p), ev.getY(p));
+        }
+
+        return true;
     }
 
     @Override
