@@ -15,6 +15,9 @@ public class KeyView extends View {
     protected Paint mFillPaint, mStrokePaint;
     protected int mWidth, mHeight;
 
+    int currentTone = -1;
+    float currentPressure = -1f;
+
     protected CopyOnWriteArrayList<ToneListener> listeners = new CopyOnWriteArrayList<>();
 
     PhonotoneKey keys[] =  { new PhonotoneKey(), new PhonotoneKey(),
@@ -46,27 +49,68 @@ public class KeyView extends View {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         final int pointerCount = event.getPointerCount();
 
+        int newTone = 0;
+        float newPressure = 0;
+
 
         int upIndex = -1;
         if (event.getActionMasked() == MotionEvent.ACTION_UP) {
             upIndex = event.getActionIndex();
         }
 
-        for (PhonotoneKey key : keys) {
+        for (int keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+            PhonotoneKey key = keys[keyIndex];
             boolean pressed = false;
 
             for (int p = 0; p < pointerCount; p++) {
                 pressed |= key.rect.contains((int) event.getX(p), (int) event.getY(p)) &&
                         p != upIndex;
+                if (pressed)
+                    newPressure += event.getPressure(p);
             }
 
             if (key.pressed != pressed) {
                 key.pressed = pressed;
                 invalidate(key.rect);
+                if (pressed) {
+                    newTone |= 1 << keyIndex;
+                }
             }
         }
 
+        if (newTone != currentTone) {
+            if (currentTone != -1)
+                notifyReleased(currentTone);
+
+            if (newTone != 0)
+                notifyPressed(newTone, newPressure);
+
+            currentTone = newTone;
+            currentPressure = newPressure;
+        } else if (Math.abs(newPressure - currentPressure) > 0.1) {
+            currentPressure = newPressure;
+            notifyPressureChanged(newPressure);
+        }
+
         return true;
+    }
+
+    protected void notifyReleased(int tone) {
+        for (ToneListener l : listeners) {
+            l.keyReleased(this, tone);
+        }
+    }
+
+    protected void notifyPressed(int tone, float pressure) {
+        for (ToneListener l : listeners) {
+            l.keyPressed(this, tone, pressure);
+        }
+    }
+
+    protected void notifyPressureChanged(float pressure) {
+        for (ToneListener l : listeners) {
+            l.pressureChanged(this, currentTone, pressure);
+        }
     }
 
     @Override
