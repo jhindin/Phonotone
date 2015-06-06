@@ -1,0 +1,3 @@
+[submodule "mididriver"]
+	path = mididriver
+	url = https://github.com/jhindin/mididriver.git
