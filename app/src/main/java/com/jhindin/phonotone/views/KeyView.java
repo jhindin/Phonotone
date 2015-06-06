@@ -111,7 +111,7 @@ public class KeyView extends View {
         }
     }
 
-    class PhonotoneKey {
+    protected class PhonotoneKey {
         public Rect rect = new Rect();
         boolean pressed = false;
     }
