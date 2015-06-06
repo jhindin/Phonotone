@@ -9,9 +9,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class KeyView extends View {
     protected Paint mFillPaint, mStrokePaint;
     protected int mWidth, mHeight;
+
+    protected CopyOnWriteArrayList<ToneListener> listeners = new CopyOnWriteArrayList<>();
 
     PhonotoneKey keys[] =  { new PhonotoneKey(), new PhonotoneKey(),
             new PhonotoneKey(), new PhonotoneKey(),
@@ -28,6 +32,14 @@ public class KeyView extends View {
         mStrokePaint.setColor(0xffffffff);
         mStrokePaint.setStyle(Paint.Style.STROKE);
 
+    }
+
+    public void addToneListener(ToneListener l) {
+        listeners.add(l);
+    }
+
+    public void removeToneListener(ToneListener l) {
+        listeners.remove(l);
     }
 
     @Override
