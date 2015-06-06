@@ -10,8 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class KeyView extends View {
-    Paint mFillPaint, mStrokePaint;
-    int mWidth, mHeight;
+    protected Paint mFillPaint, mStrokePaint;
+    protected int mWidth, mHeight;
 
     PhonotoneKey keys[] =  { new PhonotoneKey(), new PhonotoneKey(),
             new PhonotoneKey(), new PhonotoneKey(),
