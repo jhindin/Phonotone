@@ -1,1 +1,4 @@
 include ':app'
+include ':mididriver'
+project (':mididriver').projectDir = new File('../mididriver/mididriver')
+
