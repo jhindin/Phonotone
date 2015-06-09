@@ -11,7 +11,7 @@ import android.view.View;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class KeyView extends View {
+public class RearKeyView extends View {
     protected Paint mFillPaint, mStrokePaint;
     protected int mWidth, mHeight;
 
@@ -25,7 +25,7 @@ public class KeyView extends View {
             new PhonotoneKey(), new PhonotoneKey()};
 
 
-    public KeyView(Context context, AttributeSet attrs) {
+    public RearKeyView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         mFillPaint = new Paint();

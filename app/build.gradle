@@ -20,8 +20,12 @@ android {
     }
 }
 
+repositories {
+    mavenLocal()
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile project(':mididriver')
+    compile 'org.billthefarmer.mididriver:mididriver:0.8'
 }
