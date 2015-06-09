@@ -81,13 +81,10 @@ public class RearKeyView extends View {
 
         if (newTone != currentTone) {
             if (currentTone != 0) {
-                System.out.println("Released " + currentTone);
                 notifyReleased(currentTone);
             }
 
-
             if (newTone != 0) {
-                System.out.println("Pressed " + newTone + " with pressure " + newPressure);
                 notifyPressed(newTone, newPressure);
             }
 

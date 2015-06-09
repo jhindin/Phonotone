@@ -2,8 +2,8 @@ package com.jhindin.phonotone;
 
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +13,7 @@ import com.jhindin.phonotone.views.ToneListener;
 
 import org.billthefarmer.mididriver.MidiConstants;
 
-public class RearKeysActivity extends ActionBarActivity implements ToneListener {
+public class RearKeysActivity extends AppCompatActivity implements ToneListener {
 
     PhonotoneApp app;
     boolean jazzHandSupported = true;
