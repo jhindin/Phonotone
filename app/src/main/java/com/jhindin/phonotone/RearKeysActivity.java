@@ -6,25 +6,54 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class RearKeysActivity extends ActionBarActivity {
+import com.jhindin.phonotone.views.RearKeyView;
+import com.jhindin.phonotone.views.ToneListener;
+
+import org.billthefarmer.mididriver.MidiConstants;
+
+public class RearKeysActivity extends ActionBarActivity implements ToneListener {
+
+    PhonotoneApp app;
+    boolean jazzHandSupported = true;
+    RearKeyView keyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        app = (PhonotoneApp)getApplication();
+
         PackageManager pm = getPackageManager();
 
         if (!pm.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN_MULTITOUCH_JAZZHAND))
         {
+            jazzHandSupported = false;
+
             AlertDialog.Builder ab =  new AlertDialog.Builder(this);
             ab.setTitle("No multitouch");
 
             ab.show();
-
+            return;
         }
 
+        keyView = (RearKeyView) findViewById(R.id.rear_key);
+        keyView.addToneListener(this);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        app.activityResumed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        app.activityPaused();
     }
 
     @Override
@@ -48,4 +77,21 @@ public class RearKeysActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void keyPressed(View source, int musicKey, float pressure) {
+        app.sendMidi(MidiConstants.NOTE_ON, (byte)(musicKey + 32), (byte)(pressure * 128));
+    }
+
+    @Override
+    public void keyReleased(View source, int musicKey) {
+        app.sendMidi(MidiConstants.NOTE_OFF, (byte)(musicKey + 32), (byte)63);
+
+    }
+
+    @Override
+    public void pressureChanged(View source, int musicKey, float pressure) {
+        app.sendMidi(MidiConstants.NOTE_ON, (byte)(musicKey + 32), (byte)(pressure * 128));
+    }
+
 }
