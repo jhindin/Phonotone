@@ -80,7 +80,11 @@ public class RearKeysActivity extends ActionBarActivity implements ToneListener 
 
     @Override
     public void keyPressed(View source, int musicKey, float pressure) {
-        app.sendMidi(MidiConstants.NOTE_ON, (byte)(musicKey + 32), (byte)(pressure * 128));
+        int iPressure = (int)(pressure * 128);
+        if (iPressure > 128)
+            iPressure = 128;
+
+        app.sendMidi(MidiConstants.NOTE_ON, (byte)(musicKey + 32), (byte)(iPressure - 1));
     }
 
     @Override
@@ -91,7 +95,7 @@ public class RearKeysActivity extends ActionBarActivity implements ToneListener 
 
     @Override
     public void pressureChanged(View source, int musicKey, float pressure) {
-        app.sendMidi(MidiConstants.NOTE_ON, (byte)(musicKey + 32), (byte)(pressure * 128));
+        //0app.sendMidi(MidiConstants.NOTE_ON, (byte)(musicKey + 32), (byte)(pressure * 128));
     }
 
 }

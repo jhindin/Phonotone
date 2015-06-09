@@ -15,7 +15,7 @@ public class RearKeyView extends View {
     protected Paint mFillPaint, mStrokePaint;
     protected int mWidth, mHeight;
 
-    int currentTone = -1;
+    int currentTone = 0;
     float currentPressure = -1f;
 
     protected CopyOnWriteArrayList<ToneListener> listeners = new CopyOnWriteArrayList<>();
@@ -65,25 +65,31 @@ public class RearKeyView extends View {
             for (int p = 0; p < pointerCount; p++) {
                 pressed |= key.rect.contains((int) event.getX(p), (int) event.getY(p)) &&
                         p != upIndex;
-                if (pressed)
+                if (pressed && newPressure < event.getPressure(p))
                     newPressure += event.getPressure(p);
             }
 
             if (key.pressed != pressed) {
                 key.pressed = pressed;
                 invalidate(key.rect);
-                if (pressed) {
-                    newTone |= 1 << keyIndex;
-                }
             }
+            if (pressed) {
+                newTone |= 1 << keyIndex;
+            }
+
         }
 
         if (newTone != currentTone) {
-            if (currentTone != -1)
+            if (currentTone != 0) {
+                System.out.println("Released " + currentTone);
                 notifyReleased(currentTone);
+            }
 
-            if (newTone != 0)
+
+            if (newTone != 0) {
+                System.out.println("Pressed " + newTone + " with pressure " + newPressure);
                 notifyPressed(newTone, newPressure);
+            }
 
             currentTone = newTone;
             currentPressure = newPressure;

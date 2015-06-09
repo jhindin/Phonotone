@@ -55,7 +55,7 @@ public class PhonotoneApp extends Application implements MidiDriver.OnMidiStartL
 
     public void onMidiStart() {
         midiStartAcknowledged = true;
-        sendMidi(MidiConstants.PROGRAM_CHANGE, GeneralMidiConstants.HARPSICHORD);
+        sendMidi(MidiConstants.PROGRAM_CHANGE, GeneralMidiConstants.ACOUSTIC_GRAND_PIANO);
     }
 
     public void sendMidi(byte...args)
