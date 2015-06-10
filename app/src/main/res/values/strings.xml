@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Phonotone</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_instruments">Select instrument</string>
+
+    <string name="title_activity_instrument_selection">Instruments</string>
+
+    <string name="instrument_list_tab">List</string>
+    <string name="instrument_favs_tab">Favorites</string>
+
 </resources>
