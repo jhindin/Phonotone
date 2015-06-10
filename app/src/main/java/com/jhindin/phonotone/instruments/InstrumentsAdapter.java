@@ -62,7 +62,7 @@ public class InstrumentsAdapter extends BaseExpandableListAdapter {
         Family family = families[groupPosition];
 
         if (convertView == null) {
-            convertView = lInf.inflate(R.layout.family_list_entry, parent);
+            convertView = lInf.inflate(R.layout.family_list_entry, parent, false);
         }
 
         TextView familiyNameView = (TextView) convertView.findViewById(R.id.family_name);
@@ -76,7 +76,7 @@ public class InstrumentsAdapter extends BaseExpandableListAdapter {
         Instrument instrument = families[groupPosition].instruments[childPosition];
 
         if (convertView == null) {
-            convertView = lInf.inflate(R.layout.instrument_list_entry, parent);
+            convertView = lInf.inflate(R.layout.instrument_list_entry, parent, false);
         }
 
         TextView instrumentNameView = (TextView) convertView.findViewById(R.id.instrument_name);

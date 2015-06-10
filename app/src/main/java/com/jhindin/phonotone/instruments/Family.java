@@ -9,7 +9,7 @@ public class Family {
         this.instruments = instruments;
     }
 
-    static Family GeneralMidiFamilies[] = new Family[]{
+    public static Family generalMidiFamilies[] = new Family[]{
             new Family("Piano",
                     new Instrument("Acoustic Grand Piano", 0),
                     new Instrument("Bright Acoustic Piano", 1),

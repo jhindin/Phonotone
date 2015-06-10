@@ -2,6 +2,7 @@ package com.jhindin.phonotone;
 
 import java.util.Locale;
 
+import android.app.ExpandableListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -10,16 +11,21 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import com.jhindin.phonotone.instruments.Family;
+import com.jhindin.phonotone.instruments.InstrumentsAdapter;
 
-public class InstrumentSelectionActivity extends ActionBarActivity {
+
+public class InstrumentSelectionActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -88,15 +94,19 @@ public class InstrumentSelectionActivity extends ActionBarActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return new InstrumentListFragment();
+                case 1:
+                    return PlaceholderFragment.newInstance(1);
+            }
+            return null;
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
@@ -112,6 +122,16 @@ public class InstrumentSelectionActivity extends ActionBarActivity {
         }
     }
 
+    public static class InstrumentListFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_instrument_selection, container, false);
+            ExpandableListView listView = (ExpandableListView)rootView.findViewById(R.id.instruments_list);
+            listView.setAdapter(new InstrumentsAdapter(getActivity().getBaseContext(), Family.generalMidiFamilies));
+            return rootView;
+        }
+    }
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -140,8 +160,10 @@ public class InstrumentSelectionActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_instrument_selection, container, false);
-            return rootView;
+            TextView tv = new TextView(container.getContext());
+            tv.setText("placeholder");
+            container.addView(tv);
+            return tv;
         }
     }
 
