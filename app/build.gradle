@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId "com.jhindin.phonotone"
-        minSdkVersion 17
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -27,5 +27,5 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'org.billthefarmer.mididriver:mididriver:0.8'
+    compile 'org.billthefarmer.mididriver:mididriver:0.9'
 }
