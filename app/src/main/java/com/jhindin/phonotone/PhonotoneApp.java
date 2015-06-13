@@ -7,12 +7,17 @@ import org.billthefarmer.mididriver.GeneralMidiConstants;
 import org.billthefarmer.mididriver.MidiDriver;
 import org.billthefarmer.mididriver.MidiConstants;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 public class PhonotoneApp extends Application implements MidiDriver.OnMidiStartListener  {
     MidiDriver midiDriver;
     Handler handler;
     int nActivities;
     boolean midiStarted = false;
     boolean midiStartAcknowledged = false;
+
+    PriorityQueue<ScheduledMidiEvent> eventQueue = new PriorityQueue<>();
 
     byte currentInstrument = (byte)6;
 
@@ -64,8 +69,29 @@ public class PhonotoneApp extends Application implements MidiDriver.OnMidiStartL
             midiDriver.queueEvent(args);
     }
 
+    public void scheduleEvent(long delay, byte...eventBytes) {
+        ScheduledMidiEvent futureEvent = new ScheduledMidiEvent(delay, eventBytes);
+
+    }
 
 
+    class ScheduledMidiEvent implements Comparable<ScheduledMidiEvent> {
+        ScheduledMidiEvent(long delay, byte...eventBytes) {
+            time = System.currentTimeMillis() + delay;
+            event = eventBytes;
+        }
+
+        long time;
+
+        byte event[];
+
+        @Override
+        public int compareTo(ScheduledMidiEvent another) {
+            return this.time < another.time ? -1 :
+                    (this.time >another.time ? 1 : 0);
+
+        }
+    }
 
 
 
