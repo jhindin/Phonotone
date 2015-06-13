@@ -1,7 +1,10 @@
 package com.jhindin.phonotone;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 
 import org.billthefarmer.mididriver.GeneralMidiConstants;
 import org.billthefarmer.mididriver.MidiDriver;
@@ -10,86 +13,92 @@ import org.billthefarmer.mididriver.MidiConstants;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-public class PhonotoneApp extends Application implements MidiDriver.OnMidiStartListener  {
+public class PhonotoneApp extends Application  implements Application.ActivityLifecycleCallbacks {
     MidiDriver midiDriver;
     Handler handler;
-    int nActivities;
     boolean midiStarted = false;
-    boolean midiStartAcknowledged = false;
-
-    PriorityQueue<ScheduledMidiEvent> eventQueue = new PriorityQueue<>();
 
     byte currentInstrument = (byte)6;
+
+    int nActivities = 0;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         midiDriver = new MidiDriver();
-        midiDriver.setOnMidiStartListener(this);
         handler = new Handler();
-    }
-
-    public synchronized void activityPaused()
-    {
-        nActivities--;
-        if (nActivities == 0 && midiStarted) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (nActivities == 0 && midiStarted) {
-                        synchronized (PhonotoneApp.this) {
-                            midiDriver.stop();
-                            midiStarted = false;
-                            midiStartAcknowledged = false;
-                        }
-                    }
-                }
-            }, 500);
-
-        }
-    }
-
-    public synchronized void activityResumed() {
-        nActivities++;
-        if (!midiStarted) {
-            midiDriver.start();
-            midiStarted = true;
-        }
-    }
-
-    public void onMidiStart() {
-        midiStartAcknowledged = true;
-        sendMidi(MidiConstants.PROGRAM_CHANGE, GeneralMidiConstants.ACOUSTIC_GRAND_PIANO);
     }
 
     public void sendMidi(byte...args)
     {
-        if (midiStartAcknowledged)
+        if (midiStarted)
             midiDriver.queueEvent(args);
     }
 
     public void scheduleEvent(long delay, byte...eventBytes) {
-        ScheduledMidiEvent futureEvent = new ScheduledMidiEvent(delay, eventBytes);
+        ScheduledMidiEvent futureEvent = new ScheduledMidiEvent(eventBytes);
+        handler.postAtTime(futureEvent, midiDriver, SystemClock.uptimeMillis() + delay);
+
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public synchronized void  onActivityResumed(Activity activity) {
+        nActivities++;
+    }
+
+    @Override
+    public synchronized  void onActivityPaused(Activity activity) {
+        nActivities--;
+        if (nActivities == 0) {
+            handler.removeCallbacksAndMessages(midiDriver);
+            for (byte ch = 0; ch < 15; ch++) {
+                // All notes off
+                sendMidi((byte) (MidiConstants.CONTROL_CHANGE | ch), (byte) 123, (byte) 0);
+            }
+
+            midiDriver.stop();
+            midiStarted = false;
+        }
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
 
     }
 
 
-    class ScheduledMidiEvent implements Comparable<ScheduledMidiEvent> {
-        ScheduledMidiEvent(long delay, byte...eventBytes) {
-            time = System.currentTimeMillis() + delay;
+    class ScheduledMidiEvent implements Runnable {
+        byte event[];
+
+        ScheduledMidiEvent(byte...eventBytes) {
             event = eventBytes;
         }
 
-        long time;
-
-        byte event[];
 
         @Override
-        public int compareTo(ScheduledMidiEvent another) {
-            return this.time < another.time ? -1 :
-                    (this.time >another.time ? 1 : 0);
-
+        public void run() {
+            sendMidi(event);
         }
     }
 

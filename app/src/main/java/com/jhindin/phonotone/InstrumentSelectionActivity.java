@@ -129,6 +129,7 @@ public class InstrumentSelectionActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_instrument_selection, container, false);
             ExpandableListView listView = (ExpandableListView)rootView.findViewById(R.id.instruments_list);
             listView.setAdapter(new InstrumentsAdapter(getActivity().getBaseContext(), Family.generalMidiFamilies));
+            listView.add
             return rootView;
         }
     }
