@@ -26,6 +26,8 @@ import android.widget.TextView;
 import com.jhindin.phonotone.instruments.Family;
 import com.jhindin.phonotone.instruments.InstrumentsAdapter;
 
+import org.billthefarmer.mididriver.MidiConstants;
+
 
 public class InstrumentSelectionActivity extends AppCompatActivity {
 
@@ -128,6 +130,7 @@ public class InstrumentSelectionActivity extends AppCompatActivity {
             implements ExpandableListView.OnChildClickListener,
             ExpandableListView.OnGroupClickListener
     {
+        PhonotoneApp app;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -136,12 +139,16 @@ public class InstrumentSelectionActivity extends AppCompatActivity {
             listView.setAdapter(new InstrumentsAdapter(getActivity().getBaseContext(), Family.generalMidiFamilies));
             listView.setOnChildClickListener(this);
             listView.setOnGroupClickListener(this);
+
+            app = (PhonotoneApp)getActivity().getApplication();
             return rootView;
         }
 
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            System.out.println("Selected " + id);
+git             app.scheduleEvent(0, (byte)(MidiConstants.PROGRAM_CHANGE | 1), (byte) id,
+                    (byte)(MidiConstants.NOTE_ON | 1), (byte)64, (byte)63);
+            app.scheduleEvent(125, (byte)(MidiConstants.NOTE_OFF | 1), (byte)64, (byte)63);
             return false;
         }
 
