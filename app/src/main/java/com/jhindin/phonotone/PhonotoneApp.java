@@ -28,6 +28,7 @@ public class PhonotoneApp extends Application  implements Application.ActivityLi
 
         midiDriver = new MidiDriver();
         handler = new Handler();
+        registerActivityLifecycleCallbacks(this);
     }
 
     public void sendMidi(byte...args)
@@ -54,6 +55,10 @@ public class PhonotoneApp extends Application  implements Application.ActivityLi
 
     @Override
     public synchronized void  onActivityResumed(Activity activity) {
+        if (nActivities == 0) {
+            midiDriver.start();
+            midiStarted = true;
+        }
         nActivities++;
     }
 
