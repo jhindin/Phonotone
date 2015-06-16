@@ -48,7 +48,7 @@ public class InstrumentsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+        return families[groupPosition].instruments[childPosition].pc;
     }
 
     @Override
