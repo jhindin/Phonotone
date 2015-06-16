@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -122,15 +123,21 @@ public class InstrumentSelectionActivity extends AppCompatActivity {
         }
     }
 
-    public static class InstrumentListFragment extends Fragment {
+    public static class InstrumentListFragment extends Fragment
+            implements AdapterView.OnItemClickListener  {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_instrument_selection, container, false);
             ExpandableListView listView = (ExpandableListView)rootView.findViewById(R.id.instruments_list);
             listView.setAdapter(new InstrumentsAdapter(getActivity().getBaseContext(), Family.generalMidiFamilies));
-            listView.add
+            listView.setOnItemClickListener(this);
             return rootView;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         }
     }
     /**
